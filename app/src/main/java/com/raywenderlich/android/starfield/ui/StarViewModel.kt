@@ -31,9 +31,13 @@
 
 package com.raywenderlich.android.starfield.ui
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import com.raywenderlich.android.starfield.model.Star
 import com.raywenderlich.android.starfield.model.Vector
+import com.raywenderlich.android.starfield.utils.rand
 import java.util.*
+import kotlin.concurrent.schedule
 import kotlin.math.max
 
 class StarViewModel : ViewModel() {
@@ -44,8 +48,17 @@ class StarViewModel : ViewModel() {
   private var starVectorMagnitude = max(sizeX, sizeY)
   private var timer = Timer("Stars", false)
 
-  fun startEmittingStars() {
+  val starLiveData = MutableLiveData<Star>()  //  <<== LiveData
 
+  fun startEmittingStars() {
+    timer.schedule(0, 20) {
+      val x = rand(0, sizeX.toInt()).toDouble()
+      val y = rand(0, sizeY.toInt()).toDouble()
+      val starEndPosition = calculateStarEndPosition(x, y)
+
+      val star = Star(x.toInt(), y.toInt(), starEndPosition.x.toInt(), starEndPosition.y.toInt())
+      starLiveData.postValue(star)
+    }
   }
 
   fun stopEmittingStars() {

@@ -35,6 +35,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Color
 import android.os.Bundle
@@ -62,6 +63,13 @@ class StarActivity : AppCompatActivity() {
     starViewModel = ViewModelProviders.of(this).get(StarViewModel::class.java)
 
     setupButtons()
+
+    val theObserver = Observer<Star> {
+      animateStar(it)
+    }
+
+    starViewModel.starLiveData.observe(this, theObserver)
+
   }
 
   private fun setupButtons() {
