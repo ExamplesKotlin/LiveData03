@@ -70,21 +70,22 @@ class StarActivity : AppCompatActivity() {
 
     starViewModel.starLiveData.observe(this, theObserver)
 
+    starViewModel.emittingLiveData.observe(this, Observer { emitting ->
+      resetButton.isEnabled = emitting ?: false
+      startButton.isEnabled = !resetButton.isEnabled
+    })
+
   }
 
   private fun setupButtons() {
     startButton.setOnClickListener {
       starViewModel.startEmittingStars()
-      resetButton.isEnabled = true
-      startButton.isEnabled = false
     }
 
     resetButton.setOnClickListener {
       starViewModel.stopEmittingStars()
       starViews.forEach { starField.removeView(it) }
       starViews.clear()
-      resetButton.isEnabled = false
-      startButton.isEnabled = true
     }
   }
 

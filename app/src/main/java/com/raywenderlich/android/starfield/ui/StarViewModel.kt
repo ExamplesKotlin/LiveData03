@@ -49,8 +49,10 @@ class StarViewModel : ViewModel() {
   private var timer = Timer("Stars", false)
 
   val starLiveData = MutableLiveData<Star>()  //  <<== LiveData
+  val emittingLiveData = MutableLiveData<Boolean>()
 
   fun startEmittingStars() {
+    emittingLiveData.postValue(true)
     timer.schedule(0, 20) {
       val x = rand(0, sizeX.toInt()).toDouble()
       val y = rand(0, sizeY.toInt()).toDouble()
@@ -62,6 +64,7 @@ class StarViewModel : ViewModel() {
   }
 
   fun stopEmittingStars() {
+    emittingLiveData.postValue(false)
     timer.cancel()
     timer = Timer("Stars", false)
   }
